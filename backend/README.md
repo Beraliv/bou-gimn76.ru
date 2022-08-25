@@ -1,8 +1,10 @@
 # bou-gimn76 backend
 
-This is open-source headless CMS.
+This is open-source headless CMS which is hosted in Heroku.
 
 Link 🔗 – https://bou-gimn76.herokuapp.com/admin/
+
+Full step-by-step guide – https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/deployment/hosting-guides/heroku.html#heroku
 
 ## Getting started
 
