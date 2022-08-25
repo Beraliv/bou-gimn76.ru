@@ -1,57 +1,86 @@
-# 🚀 Getting started with Strapi
+# bou-gimn76 backend
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html) (CLI) which lets you scaffold and manage your project in seconds.
+This is open-source headless CMS which is hosted in Heroku.
 
-### `develop`
+Link 🔗 – https://bou-gimn76.herokuapp.com/admin/
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html#strapi-develop)
+Full step-by-step guide – https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/deployment/hosting-guides/heroku.html#heroku
 
+## Getting started
+
+1. Install dependencies
+
+```bash
+yarn
 ```
-npm run develop
-# or
+
+2. Create `.env` file based on the [`.env.example`](/backend/.env.example):
+
+```bash
+HOST=0.0.0.0
+PORT=1337
+APP_KEYS="toBeModified1,toBeModified2"
+API_TOKEN_SALT=tobemodified
+ADMIN_JWT_SECRET=tobemodified
+JWT_SECRET=tobemodified
+```
+
+3. Run dev server
+
+```bash
 yarn develop
 ```
 
-### `start`
+## Deployment
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html#strapi-start)
+1. Create `.git` project with backend only:
 
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/developer-docs/latest/developer-resources/cli/CLI.html#strapi-build)
-
-```
-npm run build
-# or
-yarn build
+```bash
+cd backend
+git init
+git add .
+git commit -m "Initial Commit"
 ```
 
-## ⚙️ Deployment
+2. Create Heroku project:
 
-Strapi gives you many possible deployment options for your project. Find the one that suits you on the [deployment section of the documentation](https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/deployment.html).
+```bash
+# New project
+heroku create
 
-## 📚 Learn more
+# Connect to existing project
+heroku git:remote -a <your-heroku-app-name>
+```
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://docs.strapi.io) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+3. Set up Postgres in Heroku:
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+```bash
+heroku addons:create heroku-postgresql:hobby-dev
+```
 
-## ✨ Community
+4. Set config data for Postgres:
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+```bash
+# Use ./config/env/production/database.ts instead of ./config/database.ts
+heroku config:set NODE_ENV=production
 
----
+# Use your .env to set it in Heroku
+heroku config:set MY_HEROKU_URL=$(heroku info -s | grep web_url | cut -d= -f2)
+heroku config:set APP_KEYS=$(cat .env | grep APP_KEYS | cut -d= -f2-)
+heroku config:set API_TOKEN_SALT=$(cat .env | grep API_TOKEN_SALT | cut -d= -f2)
+heroku config:set ADMIN_JWT_SECRET=$(cat .env | grep ADMIN_JWT_SECRET | cut -d= -f2)
+heroku config:set JWT_SECRET=$(cat .env | grep -w JWT_SECRET | cut -d= -f2)
+```
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+5. Deploy
+
+```bash
+git push heroku HEAD:main
+```
+
+## Technologies:
+
+- [Strapi](https://github.com/strapi/strapi) – admin panel
+- [sqlite](https://www.sqlite.org/index.html) - SQL DB for local development
+- [Postgres](https://www.postgresql.org/about/) - Relative SQL DB for production
+- [Heroku](https://www.heroku.com/about) - Deploy, manage and scale apps
